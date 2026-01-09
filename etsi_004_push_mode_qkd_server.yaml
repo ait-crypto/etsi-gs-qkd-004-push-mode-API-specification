@@ -1,0 +1,261 @@
+openapi: 3.1.2
+info:
+  title: ETSI GS QKD 004 push mode specification, QKD server
+  description: Server description of the QKD endpoint processing ETSI GS QKD 004 push mode requests
+  version: 1.0.0
+  contact:
+    url: https://qkd-kms.ait.ac.at
+
+servers:
+  - url: https://qkd_server/api/v1/kms/etsi004
+
+tags:
+  - name: etsi004
+
+paths:
+  /open-connect:
+    post:
+      tags:
+        - etsi004
+      summary: open key stream
+      description: The `open-connect` message connects a KMS to the QKD Device. Conforming to the specification, the QKD device will assign the `key_stream_id` and can suggest alternative QoS due to its capabilities.
+      operationId: post_open_connect
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source:
+                  type: string
+                  description: the source URI of the request.
+                  format: uri
+                  example: "http://kms-1.net"
+                destination:
+                  type: string
+                  description: the destination URI of the request.
+                  format: uri
+                  example: "http://kms-2.net"
+                key_stream_id:
+                  type: string
+                  format: uuid
+                  description: key stream ID. If not specified it is up to the QKD device to define the UUID
+                qos:
+                  description: requested QoS
+                  $ref: "#/components/schemas/qos"
+              required:
+                - source
+                - destination
+                - qos
+
+      responses:
+        "201":
+          description: Key stream successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  source:
+                    type: string
+                    description: the source URI of the request.
+                    format: uri
+                    example: "http://kms-1.net"
+                  destination:
+                    type: string
+                    description: the destination URI of the request.
+                    format: uri
+                    example: "http://kms-2.net"
+                  key_stream_id:
+                    type: string
+                    format: uuid
+                    description: key stream ID. If not specified it is up to the QKD device to define the UUID
+                  qos:
+                    description: requested QoS
+                    $ref: "#/components/schemas/qos"
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - source
+                  - destination
+                  - qos
+        "400":
+          description: Client sent a malformed input
+
+        "500":
+          description: The server experienced an internal error
+
+  /get-key:
+    get:
+      tags:
+        - etsi004
+      summary: start pushed key retrieval process
+      description: The `get-key` message is the starting point after which the QKD device can start pushing keys.
+      operationId: get_key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key_stream_id:
+                  type: string
+                  format: uuid
+                  description: corresponding to the one given in `open_connect`
+                index:
+                  type: integer
+                  format: uint32
+                  description: increasing index of the key chunk in the key stream. Wrapping at UINT_MAX.
+                metadata:
+                  $ref: "#/components/schemas/metadata"
+              required:
+                - key_stream_id
+      responses:
+        "205":
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                  metadata:
+                    $ref: "#/components/schemas/metadata"
+                required:
+                  - status
+        "400":
+          description: Client sent a malformed input
+
+        "500":
+          description: The server experienced an internal error
+
+  /close:
+    put:
+      tags:
+        - etsi004
+      summary: close the key stream
+      description: The `close` message disconnects the KMS from the QKD device.
+      operationId: put_close
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key_stream_id:
+                  type: string
+                  format: uuid
+                  description: corresponding to the one given in `open_connect`
+              required:
+                - key_stream_id
+      responses:
+        "204":
+          description: Key stream successfully closed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
+        "400":
+          description: Client sent a malformed input
+
+        "500":
+          description: The server experienced an internal error
+
+components:
+  schemas:
+    qos:
+      type: object
+      description: All values according to ETSI GS QKD 004 specification. If KMS does not want to specify a parameter, it is up to the choice of the QKD. Either the value is given as "null" or not present.
+      properties:
+        key_chunk_size:
+          type: integer
+          format: uint32
+          description: length of key chunks in Byte.
+          example: 32
+        max_bps:
+          type: integer
+          description: in bit per second
+          example: 128
+          format: uint32
+        min_bps:
+          type: integer
+          description: in bit per second
+          example: 64
+          format: uint32
+        jitter:
+          type: integer
+          description: in bit per second
+          format: uint32
+          example: 1
+        priority:
+          type: integer
+          description: Meaning up to implementation.
+          example: 3
+          format: uint32
+        timeout:
+          type: integer
+          description: Timeout in msec after which the call will be aborted, returning an error.
+          example: 50
+          format: uint32
+        ttl:
+          type: integer
+          description: Time in seconds after which the keys for this key stream ID shall be erased from the kms key store.
+          example: 600
+          format: uint32
+        metadata_mimetype:
+          type: string
+          description: MIME type of the metadata of the `get` request
+          example: application/json
+          format: json
+    metadata:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: uint32
+          description: size of buffer in characters
+        buffer:
+          type: string
+          description: metadata in json format.
+          format: json
+          example: ""
+    status:
+      type: integer
+      format: uint32
+      oneOf:
+        - type: integer
+          const: 0
+          description: Successful
+        - type: integer
+          const: 1
+          description: Successful connection, but peer not connected
+        - type: integer
+          const: 2
+          description: GET_KEY failed because insufficient key available
+        - type: integer
+          const: 3
+          description: GET_KEY failed because peer application is not yet connected
+        - type: integer
+          const: 4
+          description: No QKD connection available
+        - type: integer
+          const: 5
+          description: OPEN_CONNECT failed because the KSID is already in use
+        - type: integer
+          const: 6
+          description: TIMEOUT_ERROR The call failed because the specified TIMEOUT
+        - type: integer
+          const: 7
+          description: OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred
+        - type: integer
+          const: 8
+          description: GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata

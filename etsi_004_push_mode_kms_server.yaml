@@ -1,0 +1,75 @@
+openapi: 3.1.2
+info:
+  title: ETSI GS QKD 004 push mode specification, KMS server
+  description: Server description of the KMS endpoint processing ETSI GS QKD 004 push mode requests
+  version: 1.0.0
+  contact:
+    url: https://qkd-kms.ait.ac.at
+
+servers:
+  - url: https://qkd_server/api/v1/qkd/etsi004
+
+tags:
+  - name: etsi004
+
+paths:
+  /key-material:
+    post:
+      tags:
+        - etsi004
+      summary: endpoint to push key material to.
+      description: According to the sequence, after a successful `get_key`, the QKD can push the corresponding key material to this endpoint, whenever it created a new key.
+      operationId: post_key_material
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: "./etsi_004_push_mode_qkd_server.yaml#/components/schemas/status"
+                index:
+                  type: integer
+                  format: uint32
+                  description: increasing index of the key chunk in the key stream. Wrapping at UINT_MAX.
+                key_buffer:
+                  type: string
+                  format: base64
+                metadata:
+                  type: object
+                  properties:
+                    size:
+                      type: integer
+                      format: uint32
+                      description: size of buffer in characters
+                      example: 57
+                    buffer:
+                      type: object
+                      description: metadata in json format.
+                      format: json
+                      properties:
+                        key_stream_id:
+                          description: key stream ID to which the value belongs (required for KMS in case of multiple open key streams)
+                          type: string
+                          format: uuid
+                      required:
+                        - key_stream_id
+              required:
+                - status
+                - index
+                - key_buffer
+      responses:
+        "201":
+          description: Key successfully received
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "./etsi_004_push_mode_qkd_server.yaml#/components/schemas/status"
+                  metadata:
+                    $ref: "./etsi_004_push_mode_qkd_server.yaml#/components/schemas/metadata"
+                required:
+                  - status

@@ -1,0 +1,44 @@
+@startuml
+!include  ./style.pu
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+skinparam dpi 300
+autonumber
+!pragma teoz true
+
+title: Two node scenario, no errors, no predefined key stream ID (ks_ID), push based\nNote: dashed lines beyond scope of specification.
+
+box "Node A" #WhiteSmoke
+participant KMS_A
+participant QKD_A
+end box
+box "Node B" #WhiteSmoke
+participant QKD_B
+participant KMS_B
+end box
+
+
+KMS_A -> QKD_A: **open_connect**\n ""Src"", ""Dst"", ""QoS""
+QKD_A --> QKD_A: generate KS_ID
+QKD_A --> QKD_B: New Connection\n ""Src"", ""Dst"", ""QoS"", ""ks_ID""
+QKD_A -> KMS_A: **Response**\n ""ks_ID"", ""QoS"", ""status""
+KMS_A --> KMS_B: Send ""ks_ID""\n ""ks_ID"" 
+KMS_B -> QKD_B: **open_connect**\n ""Src"", ""Dst"", ""QoS"", //""ks_ID""//
+QKD_B -> KMS_B: **Response**\n ""QoS"", ""status"", ""ks_ID"" 
+
+KMS_B -> QKD_B: **get_key**\n ""ks_ID""
+&KMS_A -> QKD_A: **get_key**\n ""ks_ID""
+
+loop
+QKD_A -> KMS_A: **Response (key_material)**\n ""key"", ""index"", ""meta"", ""status""
+end loop
+&loop
+QKD_B -> KMS_B: **Response (key_material)**\n ""key"", ""index"", ""meta"", ""status""
+end loop
+KMS_A <--> KMS_B: Sync
+
+KMS_A -> QKD_A: **close**\n ""ks_ID""
+&KMS_B -> QKD_B: **close**\n ""ks_ID""
+QKD_A -> KMS_A: **Response**\n ""status""
+&QKD_B -> KMS_B: **Response**\n ""status""
+@enduml

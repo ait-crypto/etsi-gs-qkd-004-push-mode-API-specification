@@ -1,0 +1,37 @@
+```plantuml
+@startuml
+!include  ./style.pu
+skinparam ObjectFontStyle bold
+skinparam ObjectAttributeFontSize 12
+skinparam ClassAttributeFontSize 12
+skinparam ClassFontStyle bold
+skinparam dpi 300
+
+allow_mixing
+
+'skinparam linetype polyline
+'skinparam linetype ortho
+package "SD-QKD Node"{
+    object "Key Management System (KMS)" as kms #LemonChiffon{
+        * Manage and provide symmetric keys
+    }
+
+    object "Security Application(s) (App)" as app{
+        * Consume keys
+    }
+    package "QKD Node"{
+        object "QKD Module" as qkd #Lime{
+            * provide QKD Keys
+        }
+
+    }
+}
+object "Peer KMS" as red_network{
+    * KMS instance on other SD-QKD Node
+}
+
+app -down- kms: ETSI 004 (pull)
+kms -down- qkd: **ETSI 004 (push)**
+kms -right- red_network: IP based network
+@enduml
+```
