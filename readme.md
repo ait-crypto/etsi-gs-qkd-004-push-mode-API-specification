@@ -108,12 +108,12 @@ Please use the issue tracker to raise issues in the specification, they are very
 - Brito, JP, Ballesta, J, Brito-Mendez, R, Mengual, L, Ortíz, L, Martin, V, Cantó, R, Muñiz, A, Pastor, A, Lopez, D, Laschet, S, Ramacher, S, Piscione, P, Abdulwahed, AK, Giardina, P, Freitas, M, Calé, R, Maia, L, Magalhães, L, Anjos, G, Chaves, R, Afonso, J, Martins, P, Dias, T, Pinto, F, Vieira, M, Bacar, R & Bastos, C 2025, Secure Network Innovation in Defense: SDN and Quantum Cryptography with DISCRETION. in 2025 International Conference on Quantum Communications, Networking, and Computing (QCNC). S. 261 - 268, International Conference on Quantum Communications, Networking, and Computing (QCNC 2025), Nara, Japan, 31/03/25. [https://doi.org/10.1109/QCNC64685.2025.00049](https://doi.org/10.1109/QCNC64685.2025.00049).
 - Bastos, C, Pinto, F, Bacar, R, Anjos, G, Almeida, M, Pinto, AN, Chaves, R, Dias, T, Afonso, J, Calé, R, Freitas, M, Maia, L, Magalhães, L, Muñiz, A, Cantó, R, Brito, JP, Ballesta, J, Méndez, RB, Laschet, S, Ramacher, S, James, P, Torresetti, L, Piscione, P, Abdulwahed, AK, Giardina, P, Martin, V, Ortiz, L, Pastor, A, Muga, N, Silva, N, López, D, Vieira, M, Escribano, C & Mengal, L 2025, DISCRETION: First Field Demonstration of a Quantum Enabled SDN in the Context of a Military Exercise. in 2025 International Conference on Military Communication and Information Systems (ICMCIS). S. 11-18, 2025 International Conference on Military Communication and Information Systems (ICMCIS), Oeiras, Portugal, 13/05/25. [https://doi.org/10.1109/icmcis64378.2025.11047713](https://doi.org/10.1109/icmcis64378.2025.11047713).
 
-
 # 7. Acknowledgements
 
 Different aspects of this work were enabled by Co-funding:
 
-From Digital Europe Program under project numbers 101091642 ("QCI-CAT") and 101091564 ("eCausis").
+This project has received funding from the DIGITAL-2021-QCI-01 Digital European Program under Project number No 101091642("QCI-CAT") and the National Foundation for Research, Technology and Development.
+From Digital Europe Program under project number 101091564 ("eCausis").
 From European Union’s Horizon Europe research and innovation program under Grant Agreement No. 101114043 ("QSNP").
 
 ![EU co-funding logo](https://www.eacea.ec.europa.eu/sites/default/files/styles/embed_large_2x/public/2022-11/EN%20Co-Funded%20by%20the%20EU_POS.png)
