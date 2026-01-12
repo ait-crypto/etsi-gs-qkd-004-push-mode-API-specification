@@ -9,12 +9,9 @@ on:
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout repository
       - uses: actions/checkout@v4
 
-      # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -27,38 +24,42 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
 
-      # Generate HTML for both specs
+      # Generate HTML
       - name: Generate HTML
         run: |
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      # Generate Markdown via Widdershins
-      - name: Convert OpenAPI to Markdown
+      # Generate PDF
+      - name: Generate PDFs
         run: |
           widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md
           widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
-
-      # Convert Markdown to PDF via Pandoc + XeLaTeX
-      - name: Generate PDF via Pandoc
-        run: |
           pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex
           pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex
 
-      # Commit generated files
+      # Commit all generated files
       - name: Commit generated files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add docs/
-          git commit -m "Auto-generate OpenAPI docs" || true
+          git commit -m "Auto-generate OpenAPI docs (HTML + PDF)" || true
           git push
 
-      # Deploy docs to GitHub Pages
-      - name: Deploy to GitHub Pages
+      # Deploy only HTML to GitHub Pages
+      - name: Deploy HTML to GitHub Pages
         # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
           destination_dir: ${{ github.ref_name }}
+          # Only include HTML files
+          exclude_assets: '**/*.pdf'
+
+      # Print the GitHub Pages URL after deployment
+      - name: Print GitHub Pages URL
+        run: |
+          REPO_NAME=${GITHUB_REPOSITORY#*/}
+          echo "✅ HTML docs deployed at: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO_NAME/${GITHUB_REF_NAME}/"
