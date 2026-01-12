@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.2
 info:
   title: ETSI GS QKD 004 push mode specification, QKD server
   description: Server description of the QKD endpoint processing ETSI GS QKD 004 push mode requests
@@ -42,6 +42,7 @@ paths:
                   format: uuid
                   description: key stream ID. If not specified it is up to the QKD device to define the UUID
                 qos:
+                  description: requested QoS
                   $ref: "#/components/schemas/qos"
               required:
                 - source
@@ -71,6 +72,7 @@ paths:
                     format: uuid
                     description: key stream ID. If not specified it is up to the QKD device to define the UUID
                   qos:
+                    description: requested QoS
                     $ref: "#/components/schemas/qos"
                   status:
                     $ref: "#/components/schemas/status"
@@ -229,15 +231,31 @@ components:
     status:
       type: integer
       format: uint32
-      enum: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-      description: |
-        Status code:
-          0 = Successful
-          1 = Successful connection, but peer not connected
-          2 = GET_KEY failed because insufficient key available
-          3 = GET_KEY failed because peer application is not yet connected
-          4 = No QKD connection available
-          5 = OPEN_CONNECT failed because the KSID is already in use
-          6 = TIMEOUT_ERROR: The call failed because the specified TIMEOUT
-          7 = OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred
-          8 = GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata
+      oneOf:
+        - type: integer
+          const: 0
+          description: Successful
+        - type: integer
+          const: 1
+          description: Successful connection, but peer not connected
+        - type: integer
+          const: 2
+          description: GET_KEY failed because insufficient key available
+        - type: integer
+          const: 3
+          description: GET_KEY failed because peer application is not yet connected
+        - type: integer
+          const: 4
+          description: No QKD connection available
+        - type: integer
+          const: 5
+          description: OPEN_CONNECT failed because the KSID is already in use
+        - type: integer
+          const: 6
+          description: TIMEOUT_ERROR The call failed because the specified TIMEOUT
+        - type: integer
+          const: 7
+          description: OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred
+        - type: integer
+          const: 8
+          description: GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata

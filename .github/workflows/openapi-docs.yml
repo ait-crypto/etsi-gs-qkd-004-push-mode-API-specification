@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Checkout repository
       - uses: actions/checkout@v4
 
       # Setup Node.js
@@ -20,9 +20,12 @@ jobs:
         with:
           node-version: 20
 
-      # Install Redocly CLI and OpenAPI-to-PDF CLI
-      - name: Install CLI tools
-        run: npm install -g @redocly/cli @svengroup/openapi-to-pdf
+      # Install CLI tools
+      - name: Install tools
+        run: |
+          npm install -g @redocly/cli widdershins
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
 
       # Generate HTML for both specs
       - name: Generate HTML
@@ -30,13 +33,19 @@ jobs:
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      # Generate PDF for both specs using openapi-to-pdf
-      - name: Generate PDF
+      # Generate Markdown via Widdershins
+      - name: Convert OpenAPI to Markdown
         run: |
-          openapi-to-pdf etsi_004_push_mode_kms_server.yaml --output docs/kms.pdf
-          openapi-to-pdf etsi_004_push_mode_qkd_server.yaml --output docs/qkd.pdf
+          widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md
+          widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
 
-      # Commit generated files back to the repository (optional)
+      # Convert Markdown to PDF via Pandoc + XeLaTeX
+      - name: Generate PDF via Pandoc
+        run: |
+          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex
+          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex
+
+      # Commit generated files
       - name: Commit generated files
         run: |
           git config user.name "github-actions"
@@ -45,7 +54,7 @@ jobs:
           git commit -m "Auto-generate OpenAPI docs" || true
           git push
 
-      # Deploy docs to GitHub Pages for main and development branches
+      # Deploy docs to GitHub Pages
       - name: Deploy to GitHub Pages
         # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
