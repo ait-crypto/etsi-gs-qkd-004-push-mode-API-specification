@@ -22,7 +22,7 @@ jobs:
         run: npm install -g @redocly/cli
 
       - name: Bundle OpenAPI specs
-        run: redocly bundle ./etsi_004_push_mode_kms_server.yaml etsi_004_push_mode_qkd_server.yaml -o bundled.yaml
+        run: redocly bundle ./etsi_004_push_mode_kms_server.yaml ./etsi_004_push_mode_qkd_server.yaml -o ./bundled.yaml
 
       - name: Generate HTML
         run: redocly build-docs bundled.yaml -o docs/openapi.html
