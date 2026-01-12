@@ -19,19 +19,29 @@ jobs:
           node-version: 20
 
       - name: Install Redocly
-        run: npm install -g @redocly/cli
+        run: npm install -g @redocly/cli serve playwright
 
-      # HTML
       - name: Generate HTML
         run: |
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      # PDF
       - name: Generate PDF
         run: |
-          redocly build-docs etsi_004_push_mode_kms_server.yaml --format pdf -o docs/kms.pdf
-          redocly build-docs etsi_004_push_mode_qkd_server.yaml --format pdf -o docs/qkd.pdf
+          serve docs -l 8080 &
+          sleep 3
+          node << 'EOF'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.goto('http://localhost:8080/kms.html');
+            await page.pdf({ path: 'docs/kms.pdf', format: 'A4' });
+            await page.goto('http://localhost:8080/qkd.html');
+            await page.pdf({ path: 'docs/qkd.pdf', format: 'A4' });
+            await browser.close();
+          })();
+          EOF
 
       - name: Commit generated files
         run: |
