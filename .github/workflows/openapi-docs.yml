@@ -1,0 +1,47 @@
+name: Generate OpenAPI Docs
+
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Redocly
+        run: npm install -g @redocly/cli
+
+      - name: Bundle OpenAPI specs
+        run: redocly bundle ./etsi_004_push_mode_kms_server.yaml etsi_004_push_mode_qkd_server.yaml -o bundled.yaml
+
+      - name: Generate HTML
+        run: redocly build-docs bundled.yaml -o docs/openapi.html
+
+      - name: Generate PDF
+        run: redocly build-docs bundled.yaml --format pdf -o docs/openapi.pdf
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/
+          git commit -m "Auto-generate OpenAPI docs" || true
+          git push
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: ${{ github.ref_name }}
