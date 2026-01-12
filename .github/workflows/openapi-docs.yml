@@ -11,29 +11,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v4
 
+      # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install Redocly
-        run: npm install -g @redocly/cli
+      # Install Redocly CLI and OpenAPI-to-PDF CLI
+      - name: Install CLI tools
+        run: npm install -g @redocly/cli @svengroup/openapi-to-pdf
 
+      # Generate HTML for both specs
       - name: Generate HTML
         run: |
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      - name: Install OpenAPI2PDF
-        run: npm install -g @andste82/openapi2pdf
-
+      # Generate PDF for both specs using openapi-to-pdf
       - name: Generate PDF
         run: |
-          openapi2pdf --spec etsi_004_push_mode_kms_server.yaml --out docs/kms.pdf
-          openapi2pdf --spec etsi_004_push_mode_qkd_server.yaml --out docs/qkd.pdf
+          openapi-to-pdf etsi_004_push_mode_kms_server.yaml --output docs/kms.pdf
+          openapi-to-pdf etsi_004_push_mode_qkd_server.yaml --output docs/qkd.pdf
 
+      # Commit generated files back to the repository (optional)
       - name: Commit generated files
         run: |
           git config user.name "github-actions"
@@ -42,8 +45,9 @@ jobs:
           git commit -m "Auto-generate OpenAPI docs" || true
           git push
 
+      # Deploy docs to GitHub Pages for main and development branches
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
+        # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
