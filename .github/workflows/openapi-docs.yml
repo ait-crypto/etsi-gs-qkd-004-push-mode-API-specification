@@ -34,13 +34,16 @@ jobs:
           git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
 
+      - name: Compute safe branch name #github pages might break if "/" in branch name
+        run: echo "SAFE_BRANCH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
+
       - name: Deploy HTML to GitHub Pages
         # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
-          destination_dir: ${{ github.ref_name }}
+          destination_dir: ${{ env.SAFE_BRANCH }}
           exclude_assets: '**/*.pdf'
 
       - name: Print GitHub Pages URL
