@@ -19,29 +19,20 @@ jobs:
           node-version: 20
 
       - name: Install Redocly
-        run: npm install -g @redocly/cli serve playwright
+        run: npm install -g @redocly/cli
 
       - name: Generate HTML
         run: |
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
+      - name: Install OpenAPI2PDF
+        run: npm install -g @andste82/openapi2pdf
+
       - name: Generate PDF
         run: |
-          serve docs -l 8080 &
-          sleep 3
-          node << 'EOF'
-          const { chromium } = require('playwright');
-          (async () => {
-            const browser = await chromium.launch();
-            const page = await browser.newPage();
-            await page.goto('http://localhost:8080/kms.html');
-            await page.pdf({ path: 'docs/kms.pdf', format: 'A4' });
-            await page.goto('http://localhost:8080/qkd.html');
-            await page.pdf({ path: 'docs/qkd.pdf', format: 'A4' });
-            await browser.close();
-          })();
-          EOF
+          openapi2pdf --spec etsi_004_push_mode_kms_server.yaml --out docs/kms.pdf
+          openapi2pdf --spec etsi_004_push_mode_qkd_server.yaml --out docs/qkd.pdf
 
       - name: Commit generated files
         run: |
