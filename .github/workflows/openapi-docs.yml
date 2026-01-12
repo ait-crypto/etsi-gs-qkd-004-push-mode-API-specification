@@ -62,10 +62,23 @@ jobs:
 
       - name: Generate PDFs
         run: |
+          mkdir -p docs
           widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md --code --summary --resolve
           widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md --code --summary --resolve
-          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex
-          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex
+
+          pandoc docs/kms.md \
+            -o docs/kms.pdf \
+            --pdf-engine=xelatex \
+            -V papersize=A4 \
+            -V geometry:margin=2cm \
+            -V mainfont="DejaVu Serif"
+
+          pandoc docs/qkd.md \
+            -o docs/qkd.pdf \
+            --pdf-engine=xelatex \
+            -V papersize=A4 \
+            -V geometry:margin=2cm \
+            -V mainfont="DejaVu Serif"
 
       - name: Commit generated PDFs
         run: |
