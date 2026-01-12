@@ -7,8 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-docs:
+  html-docs:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -17,37 +18,22 @@ jobs:
         with:
           node-version: 20
 
-      # Install CLI tools
-      - name: Install tools
-        run: |
-          npm install -g @redocly/cli widdershins
-          sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
+      - name: Install Redocly
+        run: npm install -g @redocly/cli
 
-      # Generate HTML
       - name: Generate HTML
         run: |
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      # Generate PDF
-      - name: Generate PDFs
-        run: |
-          widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md
-          widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
-          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex
-          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex
-
-      # Commit all generated files
-      - name: Commit generated files
+      - name: Commit generated HTML
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/
-          git commit -m "Auto-generate OpenAPI docs (HTML + PDF)" || true
+          git add docs/*.html
+          git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
 
-      # Deploy only HTML to GitHub Pages
       - name: Deploy HTML to GitHub Pages
         # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
@@ -55,11 +41,36 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
           destination_dir: ${{ github.ref_name }}
-          # Only include HTML files
           exclude_assets: '**/*.pdf'
 
-      # Print the GitHub Pages URL after deployment
       - name: Print GitHub Pages URL
         run: |
           REPO_NAME=${GITHUB_REPOSITORY#*/}
           echo "✅ HTML docs deployed at: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO_NAME/${GITHUB_REF_NAME}/"
+
+  pdf-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PDF Toolchain
+        run: |
+          npm install -g widdershins
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
+
+      - name: Generate PDFs
+        run: |
+          widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md --code --summary --resolve
+          widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md --code --summary --resolve
+          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex
+          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex
+
+      - name: Commit generated PDFs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs/*.pdf
+          git commit -m "Auto-generate PDF OpenAPI docs" || true
+          git push
