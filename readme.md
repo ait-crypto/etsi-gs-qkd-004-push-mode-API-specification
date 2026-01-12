@@ -1,6 +1,8 @@
 ETSI 004 QKD to KMS Interface <!-- omit in toc -->
 ==
 
+[![GitHub release](https://img.shields.io/github/v/release/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification)](https://github.com/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification/releases)
+
 - [1. Overview](#1-overview)
 - [2. Specification basis](#2-specification-basis)
 - [3. Sequence](#3-sequence)
