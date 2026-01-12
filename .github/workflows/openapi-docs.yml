@@ -21,14 +21,17 @@ jobs:
       - name: Install Redocly
         run: npm install -g @redocly/cli
 
-      - name: Bundle OpenAPI specs
-        run: redocly bundle ./etsi_004_push_mode_kms_server.yaml ./etsi_004_push_mode_qkd_server.yaml -o ./bundled.yaml
-
+      # HTML
       - name: Generate HTML
-        run: redocly build-docs bundled.yaml -o docs/openapi.html
+        run: |
+          redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
+          redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
+      # PDF
       - name: Generate PDF
-        run: redocly build-docs bundled.yaml --format pdf -o docs/openapi.pdf
+        run: |
+          redocly build-docs etsi_004_push_mode_kms_server.yaml --format pdf -o docs/kms.pdf
+          redocly build-docs etsi_004_push_mode_qkd_server.yaml --format pdf -o docs/qkd.pdf
 
       - name: Commit generated files
         run: |
