@@ -62,7 +62,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-xetex
 
-      - name: Generate Markdown (OpenAPI Generator)
+      - name: Generate Markdown
         run: |
           mkdir -p docs/kms-md docs/qkd-md
 
@@ -76,9 +76,16 @@ jobs:
             -g markdown \
             -o docs/qkd-md
 
-          # Merge markdown into single file per spec
-          cat docs/kms-md/README.md docs/kms-md/docs/*.md > docs/kms.md
-          cat docs/qkd-md/README.md docs/qkd-md/docs/*.md > docs/qkd.md
+          # Merge markdown properly
+          cat docs/kms-md/README.md \
+              docs/kms-md/Apis/*.md \
+              docs/kms-md/Models/*.md \
+              > docs/kms.md
+
+          cat docs/qkd-md/README.md \
+              docs/qkd-md/Apis/*.md \
+              docs/qkd-md/Models/*.md \
+              > docs/qkd.md
 
       - name: Generate PDFs
         run: |
