@@ -23,18 +23,20 @@ jobs:
 
       - name: Generate HTML
         run: |
+          mkdir -p docs
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      - name: Commit generated HTML
+      - name: Commit HTML
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+          git pull --rebase
           git add docs/*.html
           git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
 
-      - name: Compute safe branch name #github pages might break if "/" in branch name
+      - name: Compute safe branch name # github pages might break if "/" in branch name
         run: echo "SAFE_BRANCH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
 
       - name: Deploy HTML to GitHub Pages
@@ -46,13 +48,16 @@ jobs:
           destination_dir: ${{ env.SAFE_BRANCH }}
           exclude_assets: '**/*.pdf'
 
-      - name: Print GitHub Pages URL
+      - name: Print GitHub Pages URLs
         run: |
-          REPO_NAME=${GITHUB_REPOSITORY#*/}
-          echo "HTML docs deployed at: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO_NAME/${SAFE_BRANCH}/"
+          REPO=${GITHUB_REPOSITORY#*/}
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${SAFE_BRANCH}"
+          echo "$BASE/kms.html"
+          echo "$BASE/qkd.html"
 
   pdf-docs:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -60,7 +65,7 @@ jobs:
         run: |
           npm install -g @openapitools/openapi-generator-cli
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex
+          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
 
       - name: Generate Markdown
         run: |
@@ -76,7 +81,6 @@ jobs:
             -g markdown \
             -o docs/qkd-md
 
-          # Merge markdown properly
           cat docs/kms-md/README.md \
               docs/kms-md/Apis/*.md \
               docs/kms-md/Models/*.md \
@@ -100,3 +104,12 @@ jobs:
             --pdf-engine=xelatex \
             -V papersize=A4 \
             -V geometry:margin=2cm
+
+      - name: Commit PDFs + Markdown
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git pull --rebase
+          git add docs/*.md docs/*.pdf
+          git commit -m "Auto-generate PDF OpenAPI docs" || true
+          git push
