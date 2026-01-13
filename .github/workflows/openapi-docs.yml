@@ -57,25 +57,32 @@ jobs:
 
   pdf-docs:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Tools
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Redocly + Pandoc
         run: |
-          npm install -g redoc-cli
+          npm install -g @redocly/cli
           sudo apt-get update
           sudo apt-get install -y pandoc texlive-xetex
 
       - name: Generate Markdown
         run: |
           mkdir -p docs
-          redoc-cli bundle etsi_004_push_mode_kms_server.yaml -o docs/kms.md
-          redoc-cli bundle etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
+          redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.md
+          redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
 
       - name: Generate PDFs
         run: |
-          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
-          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
+          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex -V papersize:A4 -V geometry:margin=2cm
+          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex -V papersize:A4 -V geometry:margin=2cm
+
       - name: Commit PDFs + Markdown
         run: |
           git config user.name "github-actions"
