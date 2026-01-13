@@ -6,6 +6,7 @@ on:
       - etsi_004_push_mode_kms_server.yaml
       - etsi_004_push_mode_qkd_server.yaml
       - .github/workflows/openapi-docs.yml
+      - docs/rapipdf_config.json
   workflow_dispatch:
 
 jobs:
