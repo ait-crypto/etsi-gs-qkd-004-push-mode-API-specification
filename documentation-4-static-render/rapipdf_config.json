@@ -1,0 +1,8 @@
+{
+  "pdfSchemaStyle": "table",
+  "pdfStyles": {
+    "gray": { "color": "#333333" },
+    "lightGray": { "color": "#000000" },
+    "darkGray": { "color": "#666666" }
+  }
+}   
