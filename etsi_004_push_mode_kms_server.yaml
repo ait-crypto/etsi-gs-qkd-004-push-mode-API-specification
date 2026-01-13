@@ -2,7 +2,7 @@ openapi: 3.1.2
 info:
   title: ETSI GS QKD 004 push mode specification, KMS server
   description: Server description of the KMS endpoint processing ETSI GS QKD 004 push mode requests
-  version: 1.0.0
+  version: 1.0.1
   contact:
     url: https://qkd-kms.ait.ac.at
 
