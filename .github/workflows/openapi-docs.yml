@@ -31,7 +31,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git pull --rebase
           git add docs/*.html
           git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
@@ -109,7 +108,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git pull --rebase
           git add docs/*.md docs/*.pdf
           git commit -m "Auto-generate PDF OpenAPI docs" || true
           git push
