@@ -37,7 +37,7 @@ jobs:
           git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
 
-      - name: Compute safe branch name # github pages might break if "/" in branch name
+      - name: Compute safe branch name
         run: echo "SAFE_BRANCH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
 
       - name: Deploy HTML to GitHub Pages
@@ -66,27 +66,19 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Redocly + Pandoc
-        run: |
-          npm install -g @redocly/cli
-          sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex
-
-      - name: Generate Markdown
-        run: |
-          mkdir -p docs
-          redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.md
-          redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
+      - name: Install Rapipdf CLI
+        run: npm install -g @kingjan1999/rapipdf-cli
 
       - name: Generate PDFs
         run: |
-          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex -V papersize:A4 -V geometry:margin=2cm
-          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex -V papersize:A4 -V geometry:margin=2cm
+          mkdir -p docs
+          rapipdf etsi_004_push_mode_kms_server.yaml -o docs/kms.pdf -c docs/rapipdf_config.json
+          rapipdf etsi_004_push_mode_qkd_server.yaml -o docs/qkd.pdf -c docs/rapipdf_config.json
 
-      - name: Commit PDFs + Markdown
+      - name: Commit PDFs
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add docs/*.md docs/*.pdf
+          git add docs/*.pdf
           git commit -m "Auto-generate PDF OpenAPI docs" || true
           git push
