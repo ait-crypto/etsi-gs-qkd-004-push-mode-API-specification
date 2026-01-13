@@ -2,8 +2,10 @@ name: Generate OpenAPI Docs
 
 on:
   push:
-    branches:
-      - "**"
+    paths:
+      - etsi_004_push_mode_kms_server.yaml
+      - etsi_004_push_mode_qkd_server.yaml
+      - .github/workflows/openapi-docs.yml
   workflow_dispatch:
 
 jobs:
@@ -39,7 +41,6 @@ jobs:
         run: echo "SAFE_BRANCH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
 
       - name: Deploy HTML to GitHub Pages
-        # if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/development'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -56,54 +57,25 @@ jobs:
 
   pdf-docs:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Tools
         run: |
-          npm install -g @openapitools/openapi-generator-cli
+          npm install -g redoc-cli
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
+          sudo apt-get install -y pandoc texlive-xetex
 
       - name: Generate Markdown
         run: |
-          mkdir -p docs/kms-md docs/qkd-md
-
-          openapi-generator-cli generate \
-            -i etsi_004_push_mode_kms_server.yaml \
-            -g markdown \
-            -o docs/kms-md
-
-          openapi-generator-cli generate \
-            -i etsi_004_push_mode_qkd_server.yaml \
-            -g markdown \
-            -o docs/qkd-md
-
-          cat docs/kms-md/README.md \
-              docs/kms-md/Apis/*.md \
-              docs/kms-md/Models/*.md \
-              > docs/kms.md
-
-          cat docs/qkd-md/README.md \
-              docs/qkd-md/Apis/*.md \
-              docs/qkd-md/Models/*.md \
-              > docs/qkd.md
+          mkdir -p docs
+          redoc-cli bundle etsi_004_push_mode_kms_server.yaml -o docs/kms.md
+          redoc-cli bundle etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
 
       - name: Generate PDFs
         run: |
-          pandoc docs/kms.md \
-            -o docs/kms.pdf \
-            --pdf-engine=xelatex \
-            -V papersize=A4 \
-            -V geometry:margin=2cm
-
-          pandoc docs/qkd.md \
-            -o docs/qkd.pdf \
-            --pdf-engine=xelatex \
-            -V papersize=A4 \
-            -V geometry:margin=2cm
-
+          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
+          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
       - name: Commit PDFs + Markdown
         run: |
           git config user.name "github-actions"
