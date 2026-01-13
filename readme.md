@@ -4,7 +4,9 @@ ETSI 004 QKD to KMS Interface <!-- omit in toc -->
 [![GitHub release](https://img.shields.io/github/v/release/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification)](https://github.com/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification/releases)
 
 - [1. Overview](#1-overview)
-- [2. Specification basis](#2-specification-basis)
+- [2. Specification](#2-specification)
+  - [2.1. ETSI GS QKD 004](#21-etsi-gs-qkd-004)
+  - [2.2. Specification format](#22-specification-format)
 - [3. Sequence](#3-sequence)
 - [4. Notes](#4-notes)
   - [4.1. Transport protocol](#41-transport-protocol)
@@ -22,16 +24,27 @@ ETSI 004 QKD to KMS Interface <!-- omit in toc -->
 
 This document describes the interface between the QKD Module (green) and the KMS (yellow). The KMS receives the key material from the QKD device. This document describes the implementation specifics for the push mode API.
 
-# 2. Specification basis
+# 2. Specification
 
-**Note: The work published in this repository is not conducted by the ETSI group. This work has no official association or support by ETSI directly.**
+## 2.1. ETSI GS QKD 004
 
-It is rather a derivation of the concepts outlined in the [ETSI GS QKD 004 v2.1.1](https://www.etsi.org/deliver/etsi_gs/QKD/001_099/004/02.01.01_60/gs_qkd004v020101p.pdf) specification to allow a push mode of operation. The main twist on the original specification is to make the response to the `get_key` request asynchronous and move it to a separate message. This allows moving the initiative to deliver keys from the KMS to the QKD device.
+**Note: The work published in this repository is not conducted by the ETSI group. This work has no official association nor support by ETSI directly.**
 
-The specification details are given in the OpenAPI descriptions:
+It is rather a derivation of the concepts outlined in the [ETSI GS QKD 004 v2.1.1](https://www.etsi.org/deliver/etsi_gs/QKD/001_099/004/02.01.01_60/gs_qkd004v020101p.pdf) specification to allow a push mode of operation. The main twist on the original specification is to make the response to the `get_key` request asynchronous and move it to a separate message. This moves the initiative from the KMS to the QKD device, which therefore can deliver a key whenever it produced one.
+
+## 2.2. Specification format
+
+The specification details are given in the OpenAPI specifications:
 
 - [`QKD server`](./etsi_004_push_mode_qkd_server.yaml) for the endpoints hosted by the QKD server
 - [`KMS server`](./etsi_004_push_mode_kms_server.yaml) for the endpoints hosted by the KMS server
+
+For convenience static representations of the OpenAPI specification are provided:
+
+- **HTML** representation (Webpage):
+  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.html)
+  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.html)
+- **PDF** representation:
 
 This document gives additional notes for the endpoints.
 

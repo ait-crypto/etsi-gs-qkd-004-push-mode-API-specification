@@ -49,44 +49,27 @@ jobs:
       - name: Print GitHub Pages URL
         run: |
           REPO_NAME=${GITHUB_REPOSITORY#*/}
-          echo "✅ HTML docs deployed at: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO_NAME/${GITHUB_REF_NAME}/"
+          echo "HTML docs deployed at: https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO_NAME/${SAFE_BRANCH}/"
 
   pdf-docs:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PDF Toolchain
+      - name: Install Tools
         run: |
-          npm install -g widdershins
+          npm install -g redoc-cli
           sudo apt-get update
-          sudo apt-get install -y pandoc texlive-xetex texlive-fonts-recommended texlive-latex-recommended
+          sudo apt-get install -y pandoc texlive-xetex
+
+      - name: Generate Markdown
+        run: |
+          mkdir -p docs
+          redoc-cli bundle etsi_004_push_mode_kms_server.yaml -o docs/kms.md
+          redoc-cli bundle etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md
 
       - name: Generate PDFs
         run: |
-          mkdir -p docs
-          widdershins etsi_004_push_mode_kms_server.yaml -o docs/kms.md --code --summary --resolve
-          widdershins etsi_004_push_mode_qkd_server.yaml -o docs/qkd.md --code --summary --resolve
+          pandoc docs/kms.md -o docs/kms.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
+          pandoc docs/qkd.md -o docs/qkd.pdf --pdf-engine=xelatex -V papersize=A4 -V geometry:margin=2cm
 
-          pandoc docs/kms.md \
-            -o docs/kms.pdf \
-            --pdf-engine=xelatex \
-            -V papersize=A4 \
-            -V geometry:margin=2cm \
-            -V mainfont="DejaVu Serif"
-
-          pandoc docs/qkd.md \
-            -o docs/qkd.pdf \
-            --pdf-engine=xelatex \
-            -V papersize=A4 \
-            -V geometry:margin=2cm \
-            -V mainfont="DejaVu Serif"
-
-      - name: Commit generated PDFs
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add docs/*.pdf
-          git commit -m "Auto-generate PDF OpenAPI docs" || true
-          git push
