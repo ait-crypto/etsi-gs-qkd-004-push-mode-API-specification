@@ -1,258 +1,113 @@
----
-title: ETSI GS QKD 004 push mode specification, KMS server v1.0.0
-language_tabs:
-  - shell: Shell
-  - http: HTTP
-  - javascript: JavaScript
-  - ruby: Ruby
-  - python: Python
-  - php: PHP
-  - java: Java
-  - go: Go
-toc_footers: []
-includes: []
-search: true
-highlight_theme: darkula
-headingLevel: 2
+# Documentation for ETSI GS QKD 004 push mode specification, KMS server
 
----
+<a name="documentation-for-api-endpoints"></a>
+## Documentation for API Endpoints
 
-<!-- Generator: Widdershins v4.0.1 -->
+All URIs are relative to *https://qkd_server/api/v1/qkd/etsi004*
 
-<h1 id="etsi-gs-qkd-004-push-mode-specification-kms-server">ETSI GS QKD 004 push mode specification, KMS server v1.0.0</h1>
+| Class | Method | HTTP request | Description |
+|------------ | ------------- | ------------- | -------------|
+| *Etsi004Api* | [**postKeyMaterial**](Apis/Etsi004Api.md#postKeyMaterial) | **POST** /key-material | endpoint to push key material to. |
 
-> Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
-Server description of the KMS endpoint processing ETSI GS QKD 004 push mode requests
+<a name="documentation-for-models"></a>
+## Documentation for Models
 
-Base URLs:
+ - [post_key_material_201_response](./Models/post_key_material_201_response.md)
+ - [post_key_material_201_response_metadata](./Models/post_key_material_201_response_metadata.md)
+ - [post_key_material_request](./Models/post_key_material_request.md)
+ - [post_key_material_request_metadata](./Models/post_key_material_request_metadata.md)
+ - [post_key_material_request_metadata_buffer](./Models/post_key_material_request_metadata_buffer.md)
 
-* <a href="https://qkd_server/api/v1/qkd/etsi004">https://qkd_server/api/v1/qkd/etsi004</a>
 
-Web: <a href="https://qkd-kms.ait.ac.at">Support</a> 
+<a name="documentation-for-authorization"></a>
+## Documentation for Authorization
 
-<h1 id="etsi-gs-qkd-004-push-mode-specification-kms-server-etsi004">etsi004</h1>
+All endpoints do not require authorization.
+# Etsi004Api
 
-## post_key_material
+All URIs are relative to *https://qkd_server/api/v1/qkd/etsi004*
 
-<a id="opIdpost_key_material"></a>
+| Method | HTTP request | Description |
+|------------- | ------------- | -------------|
+| [**postKeyMaterial**](Etsi004Api.md#postKeyMaterial) | **POST** /key-material | endpoint to push key material to. |
 
-> Code samples
 
-```shell
-# You can also use wget
-curl -X POST https://qkd_server/api/v1/qkd/etsi004/key-material \
-  -H 'Content-Type: application/json' \
-  -H 'Accept: application/json'
+<a name="postKeyMaterial"></a>
+# **postKeyMaterial**
+> post_key_material_201_response postKeyMaterial(post\_key\_material\_request)
 
-```
+endpoint to push key material to.
 
-```http
-POST https://qkd_server/api/v1/qkd/etsi004/key-material HTTP/1.1
-Host: qkd_server
-Content-Type: application/json
-Accept: application/json
+    According to the sequence, after a successful &#x60;get_key&#x60;, the QKD can push the corresponding key material to this endpoint, whenever it created a new key.
 
-```
+### Parameters
 
-```javascript
-const inputBody = '{
-  "status": null,
-  "index": 0,
-  "key_buffer": "string",
-  "metadata": {
-    "size": 57,
-    "buffer": {
-      "key_stream_id": "4eb81a5c-031f-4d1f-881d-309bee44fc20"
-    }
-  }
-}';
-const headers = {
-  'Content-Type':'application/json',
-  'Accept':'application/json'
-};
+|Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **post\_key\_material\_request** | [**post_key_material_request**](../Models/post_key_material_request.md)|  | |
 
-fetch('https://qkd_server/api/v1/qkd/etsi004/key-material',
-{
-  method: 'POST',
-  body: inputBody,
-  headers: headers
-})
-.then(function(res) {
-    return res.json();
-}).then(function(body) {
-    console.log(body);
-});
+### Return type
 
-```
+[**post_key_material_201_response**](../Models/post_key_material_201_response.md)
 
-```ruby
-require 'rest-client'
-require 'json'
+### Authorization
 
-headers = {
-  'Content-Type' => 'application/json',
-  'Accept' => 'application/json'
-}
+No authorization required
 
-result = RestClient.post 'https://qkd_server/api/v1/qkd/etsi004/key-material',
-  params: {
-  }, headers: headers
+### HTTP request headers
 
-p JSON.parse(result)
+- **Content-Type**: application/json
+- **Accept**: application/json
 
-```
+# post_key_material_201_response
+## Properties
 
-```python
-import requests
-headers = {
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+| **status** | **Integer** |  | [default to null] |
+| **metadata** | [**post_key_material_201_response_metadata**](post_key_material_201_response_metadata.md) |  | [optional] [default to null] |
 
-r = requests.post('https://qkd_server/api/v1/qkd/etsi004/key-material', headers = headers)
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
-print(r.json())
+# post_key_material_201_response_metadata
+## Properties
 
-```
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+| **size** | **Integer** | size of buffer in characters | [optional] [default to null] |
+| **buffer** | **String** | metadata in json format. | [optional] [default to null] |
 
-```php
-<?php
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
-require 'vendor/autoload.php';
+# post_key_material_request
+## Properties
 
-$headers = array(
-    'Content-Type' => 'application/json',
-    'Accept' => 'application/json',
-);
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+| **status** | **Integer** |  | [default to null] |
+| **index** | **Integer** | increasing index of the key chunk in the key stream. Wrapping at UINT_MAX. | [default to null] |
+| **key\_buffer** | **String** |  | [default to null] |
+| **metadata** | [**post_key_material_request_metadata**](post_key_material_request_metadata.md) |  | [optional] [default to null] |
 
-$client = new \GuzzleHttp\Client();
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
-// Define array of request body.
-$request_body = array();
+# post_key_material_request_metadata
+## Properties
 
-try {
-    $response = $client->request('POST','https://qkd_server/api/v1/qkd/etsi004/key-material', array(
-        'headers' => $headers,
-        'json' => $request_body,
-       )
-    );
-    print_r($response->getBody()->getContents());
- }
- catch (\GuzzleHttp\Exception\BadResponseException $e) {
-    // handle exception or api errors.
-    print_r($e->getMessage());
- }
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+| **size** | **Integer** | size of buffer in characters | [optional] [default to null] |
+| **buffer** | [**post_key_material_request_metadata_buffer**](post_key_material_request_metadata_buffer.md) |  | [optional] [default to null] |
 
- // ...
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
-```
+# post_key_material_request_metadata_buffer
+## Properties
 
-```java
-URL obj = new URL("https://qkd_server/api/v1/qkd/etsi004/key-material");
-HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-con.setRequestMethod("POST");
-int responseCode = con.getResponseCode();
-BufferedReader in = new BufferedReader(
-    new InputStreamReader(con.getInputStream()));
-String inputLine;
-StringBuffer response = new StringBuffer();
-while ((inputLine = in.readLine()) != null) {
-    response.append(inputLine);
-}
-in.close();
-System.out.println(response.toString());
+| Name | Type | Description | Notes |
+|------------ | ------------- | ------------- | -------------|
+| **key\_stream\_id** | **UUID** | key stream ID to which the value belongs (required for KMS in case of multiple open key streams) | [default to null] |
 
-```
-
-```go
-package main
-
-import (
-       "bytes"
-       "net/http"
-)
-
-func main() {
-
-    headers := map[string][]string{
-        "Content-Type": []string{"application/json"},
-        "Accept": []string{"application/json"},
-    }
-
-    data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("POST", "https://qkd_server/api/v1/qkd/etsi004/key-material", data)
-    req.Header = headers
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    // ...
-}
-
-```
-
-`POST /key-material`
-
-*endpoint to push key material to.*
-
-According to the sequence, after a successful `get_key`, the QKD can push the corresponding key material to this endpoint, whenever it created a new key.
-
-> Body parameter
-
-```json
-{
-  "status": null,
-  "index": 0,
-  "key_buffer": "string",
-  "metadata": {
-    "size": 57,
-    "buffer": {
-      "key_stream_id": "4eb81a5c-031f-4d1f-881d-309bee44fc20"
-    }
-  }
-}
-```
-
-<h3 id="post_key_material-parameters">Parameters</h3>
-
-|Name|In|Type|Required|Description|
-|---|---|---|---|---|
-|body|body|object|true|none|
-|» status|body|any|true|none|
-|» index|body|integer(uint32)|true|increasing index of the key chunk in the key stream. Wrapping at UINT_MAX.|
-|» key_buffer|body|string(base64)|true|none|
-|» metadata|body|object|false|none|
-|»» size|body|integer(uint32)|false|size of buffer in characters|
-|»» buffer|body|object(json)|false|metadata in json format.|
-|»»» key_stream_id|body|string(uuid)|true|key stream ID to which the value belongs (required for KMS in case of multiple open key streams)|
-
-> Example responses
-
-> 201 Response
-
-```json
-{
-  "status": null,
-  "metadata": null
-}
-```
-
-<h3 id="post_key_material-responses">Responses</h3>
-
-|Status|Meaning|Description|Schema|
-|---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Key successfully received|Inline|
-
-<h3 id="post_key_material-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» status|any|true|none|none|
-|» metadata|any|false|none|none|
-
-<aside class="success">
-This operation does not require authentication
-</aside>
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
