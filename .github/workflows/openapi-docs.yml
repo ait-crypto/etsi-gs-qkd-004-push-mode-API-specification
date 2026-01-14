@@ -69,6 +69,8 @@ jobs:
 
       - name: Install Rapipdf CLI
         run: npm install -g @kingjan1999/rapipdf-cli
+          fc-list | grep -i ubuntu
+          fc-list
 
       - name: Generate PDFs
         run: |
