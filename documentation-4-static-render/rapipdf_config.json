@@ -44,6 +44,18 @@
       "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
       "italics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf",
       "bolditalics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf"
-    }
+    },
+    "Roboto": {
+      "normal": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+      "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+      "italics": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
+      "bolditalics": "/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf"
+    },
+    "RobotoMono": {
+      "normal": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+      "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
+      "italics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf",
+      "bolditalics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf"
+    },
   }
 }
