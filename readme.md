@@ -45,8 +45,12 @@ For convenience static representations of the OpenAPI specification are provided
   - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.html)
   - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.html)
 - **PDF** representation:
+  - [QKD server](./docs/qkd.pdf)
+  - [KMS server](./docs/kms.pdf)
 
-This document gives additional notes for the endpoints.
+More info on the static representations for the specification in the corresponding [readme](./docs/readme.md).
+
+This readme gives additional notes for the endpoints in the upcoming subsections.
 
 # 3. Sequence
 
@@ -62,14 +66,14 @@ Notes:
 
 # 4. Notes
 
-Most information is given in the OpenAPI specification, but some notes are given, which are too verbose for the API description.
+All relevant information is given in the OpenAPI specification, but some additional notes are given in this section.
 
 ## 4.1. Transport protocol
 
-The used transport protocol is plain http, while https with TLS 1.3 is a recommended optional implementation.
+The used transport protocol is plain http, while https with TLS 1.3 (mTLS) is a recommended optional implementation.
 
-For this reason method names as part of the url prefer the `-` over the `_` character, as it is more common typography in URLs. So for example `open-connect` in the path URL instead of `open_connect`, as used in the ETSI specification.
-Variable descriptions prefer the `_`, as for example the `key_stream_id`.
+For this reason method names as part of the url prefer the `-` over the `_` character, as it is more common typography in URLs. So for example `open-connect` is used in the path URL instead of `open_connect`, which is used in the ETSI specification.
+Variable descriptions prefer the `_`, for example `key_stream_id`.
 
 ## 4.2. open-connect
 
