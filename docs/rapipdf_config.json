@@ -1,16 +1,16 @@
 {
   "pdfSchemaStyle": "table",
   "pdfStyles": {
-    "title": { "font": "Ubuntu", "fontSize": 32 },
-    "h1": { "font": "Ubuntu", "fontSize": 22 },
-    "h2": { "font": "Ubuntu", "fontSize": 20 },
-    "h3": { "font": "Ubuntu", "fontSize": 18 },
-    "h4": { "font": "Ubuntu", "fontSize": 16 },
-    "h5": { "font": "Ubuntu", "fontSize": 14 },
-    "h6": { "font": "Ubuntu", "fontSize": 12, "bold": true },
-    "p": { "font": "Ubuntu", "fontSize": 12 },
-    "small": { "font": "Ubuntu", "fontSize": 10 },
-    "sub": { "font": "Ubuntu", "fontSize": 8 },
+    "title": { "font": "DejaVu", "fontSize": 32 },
+    "h1": { "font": "DejaVu", "fontSize": 22 },
+    "h2": { "font": "DejaVu", "fontSize": 20 },
+    "h3": { "font": "DejaVu", "fontSize": 18 },
+    "h4": { "font": "DejaVu", "fontSize": 16 },
+    "h5": { "font": "DejaVu", "fontSize": 14 },
+    "h6": { "font": "DejaVu", "fontSize": 12, "bold": true },
+    "p": { "font": "DejaVu", "fontSize": 12 },
+    "small": { "font": "DejaVu", "fontSize": 10 },
+    "sub": { "font": "DejaVu", "fontSize": 8 },
     "right": { "alignment": "right" },
     "left": { "alignment": "left" },
     "topMargin1": { "margin": [0, 180, 0, 10] },
@@ -28,21 +28,22 @@
     "darkGray": { "color": "#666666" },
     "red": { "color": "orangered" },
     "blue": { "color": "#005b96" },
-    "mono": { "font": "UbuntuMono", "fontSize": 10 },
-    "monoSub": { "font": "UbuntuMono", "fontSize": 8 }
+    "mono": { "font": "DejaVuMono", "fontSize": 10 },
+    "monoSub": { "font": "DejaVuMono", "fontSize": 8 }
   },
   "pdfFonts": {
-    "Ubuntu": {
-      "normal": "/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf",
-      "bold": "/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf",
-      "italics": "/usr/share/fonts/truetype/ubuntu/Ubuntu-RI.ttf",
-      "bolditalics": "/usr/share/fonts/truetype/ubuntu/Ubuntu-BI.ttf"
+    "DejaVu": {
+      "normal": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+      "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+      "italics": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Oblique.ttf",
+      "bolditalics": "/usr/share/fonts/truetype/dejavu/DejaVuSans-BoldOblique.ttf"
     },
-    "UbuntuMono": {
-      "normal": "/usr/share/fonts/truetype/ubuntu/UbuntuMono-R.ttf",
-      "bold": "/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf",
-      "italics": "/usr/share/fonts/truetype/ubuntu/UbuntuMono-RI.ttf",
-      "bolditalics": "/usr/share/fonts/truetype/ubuntu/UbuntuMono-BI.ttf"
+
+    "DejaVuMono": {
+      "normal": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+      "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf",
+      "italics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf",
+      "bolditalics": "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf"
     }
   }
 }

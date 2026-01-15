@@ -68,8 +68,7 @@ jobs:
           node-version: 20
 
       - name: Install Rapipdf CLI
-        run: |
-          fc-list
+        run:
           npm install -g @kingjan1999/rapipdf-cli
 
       - name: Generate PDFs
