@@ -2,11 +2,14 @@ name: Generate OpenAPI Docs
 
 on:
   push:
+    tags:
+      - '*'           # run on any tag
     paths:
       - etsi_004_push_mode_kms_server.yaml
       - etsi_004_push_mode_qkd_server.yaml
       - .github/workflows/openapi-docs.yml
       - docs/rapipdf_config.json
+
   workflow_dispatch:
 
 jobs:
@@ -38,21 +41,27 @@ jobs:
           git commit -m "Auto-generate HTML OpenAPI docs" || true
           git push
 
-      - name: Compute safe branch name
-        run: echo "SAFE_BRANCH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
+      # Works for branches AND tags
+      - name: Compute deploy path
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "DEPLOY_PATH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_PATH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
+          fi
 
       - name: Deploy HTML to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
-          destination_dir: ${{ env.SAFE_BRANCH }}
+          destination_dir: ${{ env.DEPLOY_PATH }}
           exclude_assets: '**/*.pdf'
 
-      - name: Print GitHub Pages URLs
+      - name: Print URLs
         run: |
           REPO=${GITHUB_REPOSITORY#*/}
-          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${SAFE_BRANCH}"
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${DEPLOY_PATH}"
           echo "$BASE/kms.html"
           echo "$BASE/qkd.html"
 
@@ -68,8 +77,7 @@ jobs:
           node-version: 20
 
       - name: Install Rapipdf CLI
-        run:
-          npm install -g @kingjan1999/rapipdf-cli
+        run: npm install -g @kingjan1999/rapipdf-cli
 
       - name: Generate PDFs
         run: |
