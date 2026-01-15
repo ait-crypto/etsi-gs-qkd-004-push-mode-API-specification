@@ -68,7 +68,8 @@ jobs:
           node-version: 20
 
       - name: Install Rapipdf CLI
-        run: npm install -g @kingjan1999/rapipdf-cli
+        run: |
+          npm install -g @kingjan1999/rapipdf-cli
           fc-list | grep -i ubuntu
           fc-list
 
