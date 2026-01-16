@@ -4,7 +4,9 @@ ETSI 004 QKD to KMS Interface <!-- omit in toc -->
 [![GitHub release](https://img.shields.io/github/v/release/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification)](https://github.com/ait-crypto/etsi-gs-qkd-004-push-mode-API-specification/releases)
 
 - [1. Overview](#1-overview)
-- [2. Specification basis](#2-specification-basis)
+- [2. Specification](#2-specification)
+  - [2.1. ETSI GS QKD 004](#21-etsi-gs-qkd-004)
+  - [2.2. Specification format](#22-specification-format)
 - [3. Sequence](#3-sequence)
 - [4. Notes](#4-notes)
   - [4.1. Transport protocol](#41-transport-protocol)
@@ -22,18 +24,33 @@ ETSI 004 QKD to KMS Interface <!-- omit in toc -->
 
 This document describes the interface between the QKD Module (green) and the KMS (yellow). The KMS receives the key material from the QKD device. This document describes the implementation specifics for the push mode API.
 
-# 2. Specification basis
+# 2. Specification
 
-**Note: The work published in this repository is not conducted by the ETSI group. This work has no official association or support by ETSI directly.**
+## 2.1. ETSI GS QKD 004
 
-It is rather a derivation of the concepts outlined in the [ETSI GS QKD 004 v2.1.1](https://www.etsi.org/deliver/etsi_gs/QKD/001_099/004/02.01.01_60/gs_qkd004v020101p.pdf) specification to allow a push mode of operation. The main twist on the original specification is to make the response to the `get_key` request asynchronous and move it to a separate message. This allows moving the initiative to deliver keys from the KMS to the QKD device.
+**Note: The work published in this repository is not conducted by the ETSI group. This work has no official association nor support by ETSI directly.**
 
-The specification details are given in the OpenAPI descriptions:
+It is rather a derivation of the concepts outlined in the [ETSI GS QKD 004 v2.1.1](https://www.etsi.org/deliver/etsi_gs/QKD/001_099/004/02.01.01_60/gs_qkd004v020101p.pdf) specification to allow a push mode of operation. The main twist on the original specification is to make the response to the `get_key` request asynchronous and move it to a separate message. This moves the initiative from the KMS to the QKD device, which therefore can deliver a key whenever it produced one.
+
+## 2.2. Specification format
+
+The specification details are given in the OpenAPI specifications:
 
 - [`QKD server`](./etsi_004_push_mode_qkd_server.yaml) for the endpoints hosted by the QKD server
 - [`KMS server`](./etsi_004_push_mode_kms_server.yaml) for the endpoints hosted by the KMS server
 
-This document gives additional notes for the endpoints.
+For convenience static representations of the OpenAPI specification are provided:
+
+- **HTML** representation (Webpage):
+  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.html)
+  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.html)
+- **PDF** representation:
+  - [QKD server](./docs/qkd.pdf)
+  - [KMS server](./docs/kms.pdf)
+
+More info on the static representations for the specification in the corresponding [readme](./docs/readme.md).
+
+This readme gives additional notes for the endpoints in the upcoming subsections.
 
 # 3. Sequence
 
@@ -49,14 +66,14 @@ Notes:
 
 # 4. Notes
 
-Most information is given in the OpenAPI specification, but some notes are given, which are too verbose for the API description.
+All relevant information is given in the OpenAPI specification, but some additional notes are given in this section.
 
 ## 4.1. Transport protocol
 
-The used transport protocol is plain http, while https with TLS 1.3 is a recommended optional implementation.
+The used transport protocol is plain http, while https with TLS 1.3 (mTLS) is a recommended optional implementation.
 
-For this reason method names as part of the url prefer the `-` over the `_` character, as it is more common typography in URLs. So for example `open-connect` in the path URL instead of `open_connect`, as used in the ETSI specification.
-Variable descriptions prefer the `_`, as for example the `key_stream_id`.
+For this reason method names as part of the url prefer the `-` over the `_` character, as it is more common typography in URLs. So for example `open-connect` is used in the path URL instead of `open_connect`, which is used in the ETSI specification.
+Variable descriptions prefer the `_`, for example `key_stream_id`.
 
 ## 4.2. open-connect
 
