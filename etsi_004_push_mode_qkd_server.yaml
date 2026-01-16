@@ -80,9 +80,27 @@ paths:
                   - qos
         "400":
           description: Client sent a malformed input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
 
         "500":
           description: The server experienced an internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
 
   /get-key:
     get:
@@ -126,9 +144,29 @@ paths:
                   - status
         "400":
           description: Client sent a malformed input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                  metadata:
+                    $ref: "#/components/schemas/metadata"
+                required:
+                  - status
 
         "500":
           description: The server experienced an internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
 
   /close:
     put:
@@ -164,9 +202,27 @@ paths:
                   - status
         "400":
           description: Client sent a malformed input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
 
         "500":
           description: The server experienced an internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    $ref: "#/components/schemas/status"
+                required:
+                  - status
 
 components:
   schemas:
@@ -232,6 +288,7 @@ components:
       enum: [0, 1, 2, 3, 4, 5, 6, 7, 8]
       description: |
         Status code:
+        
           0 = Successful
 
           1 = Successful connection, but peer not connected
