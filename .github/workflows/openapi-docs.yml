@@ -2,9 +2,7 @@ name: Generate OpenAPI Docs
 
 on:
   push:
-    branches:
-        - development
-        - main
+    branches: ['**']
     tags:
       - '*'           # run on any tag
     paths:
