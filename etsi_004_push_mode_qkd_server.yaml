@@ -303,21 +303,21 @@ components:
       description: |
         Status code:
 
-          0 = Successful
+          0 = Successful; HTTP code 200
 
-          1 = Successful connection, but peer not connected
+          1 = Successful connection, but peer not connected; HTTP code 200
 
-          2 = GET_KEY failed because insufficient key available
+          2 = GET_KEY failed because insufficient key available; HTTP code 500
 
-          3 = GET_KEY failed because peer application is not yet connected
+          3 = GET_KEY failed because peer application is not yet connected; HTTP code 400
 
-          4 = No QKD connection available
+          4 = No QKD connection available; HTTP code 500
 
-          5 = OPEN_CONNECT failed because the KSID is already in use
+          5 = OPEN_CONNECT failed because the KSID is already in use; HTTP code 400
 
-          6 = TIMEOUT_ERROR: The call failed because the specified TIMEOUT
+          6 = TIMEOUT_ERROR: The call failed because the specified TIMEOUT; HTTP code 500
 
-          7 = OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred
+          7 = OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred; HTTP code 500
 
-          8 = GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata
+          8 = GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata; HTTP code 400
           
