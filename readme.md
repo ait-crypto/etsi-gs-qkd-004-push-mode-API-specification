@@ -75,6 +75,8 @@ The used transport protocol is plain http, while https with TLS 1.3 (mTLS) is a 
 For this reason method names as part of the url prefer the `-` over the `_` character, as it is more common typography in URLs. So for example `open-connect` is used in the path URL instead of `open_connect`, which is used in the ETSI specification.
 Variable descriptions prefer the `_`, for example `key_stream_id`.
 
+Some http error codes are defined in the OpenAPI description. However, all http error codes are acceptable as defined in [RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#name-status-codes). They should all contain the "status" field from the ETSI specification in their body.
+
 ## 4.2. open-connect
 
 URI: `<authority>/api/v1/kms/etsi004/open-connect`
