@@ -42,11 +42,11 @@ The specification details are given in the OpenAPI specifications:
 For convenience static representations of the OpenAPI specification are provided:
 
 - **HTML** representation (Webpage):
-  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.html)
-  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.html)
+  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/html/qkd.html)
+  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/html/kms.html)
 - **PDF** representation:
-  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.pdf)
-  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.pdf)
+  - [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/pdf/qkd.pdf)
+  - [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/pdf/kms.pdf)
 
 More info on the static representations for the specification in the corresponding [readme](./docs/readme.md).
 

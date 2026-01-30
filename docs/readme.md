@@ -16,28 +16,23 @@ As it is based on tooling, error free generation can not be guaranteed, if the s
 
 The tool [Redocly](https://redocly.com/docs/cli) generates the HTML, which is then hosted as a GitHub page for convenience:
 
-- [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.html)
-- [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.html)
-- [QKD server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/qkd.html)
-- [KMS server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/kms.html)
+- [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/html/qkd.html)
+- [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/html/kms.html)
+- [QKD server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/html/qkd.html)
+- [KMS server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/html/kms.html)
 
-Any other branch can be viewed by adapting the URL, provided it triggered the corresponding GitHub action: `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/kms.html` and `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/qkd.html`. If the `<branch_name>` contains the `/` character, it has to be replaced by a `-` character.
-
-The raw HTML files can be found here:
-
-- [KMS server](../docs/kms.html)
-- [QKD server](../docs/qkd.html)
+Any other branch can be viewed by adapting the URL, provided it triggered the corresponding GitHub action: `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/html/kms.html` and `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/html/qkd.html`. If the `<branch_name>` contains the `/` character, it has to be replaced by a `-` character.
 
 # 3. PDF view
 
 The PDF is generated with [rapipdf-cli by kingjan1999](https://github.com/kingjan1999/rapipdf-cli/tree/master), a cli wrapper for the [RapiPDF](https://github.com/mrin9/RapiPdf) tool. The PDFs are also deployed at the corresponding GitHub page:
 
-- [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.pdf)
-- [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.pdf)
-- [QKD server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/qkd.pdf)
-- [KMS server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/kms.pdf)
+- [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/pdf/qkd.pdf)
+- [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/pdf/kms.pdf)
+- [QKD server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/pdf/qkd.pdf)
+- [KMS server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/pdf/kms.pdf)
 
-Any other branch can be viewed by adapting the URL, provided it triggered the corresponding GitHub action: `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/kms.html` and `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/qkd.pdf`. If the `<branch_name>` contains the `/` character, it has to be replaced by a `-` character.
+Any other branch can be viewed by adapting the URL, provided it triggered the corresponding GitHub action: `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/pdf/kms.pdf` and `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/pdf/qkd.pdf`. If the `<branch_name>` contains the `/` character, it has to be replaced by a `-` character.
 
 The tool has a fairly fixed formatting. Some clarifications:
 
