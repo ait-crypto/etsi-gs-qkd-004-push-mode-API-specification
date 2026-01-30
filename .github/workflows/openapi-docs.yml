@@ -91,7 +91,7 @@ jobs:
         run: |
           REPO=${GITHUB_REPOSITORY#*/}
           BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${DEPLOY_PATH}"
-          echo "$BASE/kms.html"
-          echo "$BASE/qkd.html"
-          echo "$BASE/kms.pdf"
-          echo "$BASE/qkd.pdf"
+          echo "$BASE/html/kms.html"
+          echo "$BASE/html/qkd.html"
+          echo "$BASE/pdf/kms.pdf"
+          echo "$BASE/pdf/qkd.pdf"
