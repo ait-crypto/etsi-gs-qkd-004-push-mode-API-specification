@@ -2,17 +2,13 @@ name: Generate OpenAPI Docs
 
 on:
   push:
-    branches:
-        - development
-        - main
-    tags:
-      - '*'           # run on any tag
+    branches: ['**']
+    tags: ['*']
     paths:
       - etsi_004_push_mode_kms_server.yaml
       - etsi_004_push_mode_qkd_server.yaml
-      - .github/workflows/openapi-docs.yml
       - docs/rapipdf_config.json
-
+      - .github/workflows/openapi-docs.yml
   workflow_dispatch:
 
 jobs:
@@ -22,8 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -36,37 +31,10 @@ jobs:
           redocly build-docs etsi_004_push_mode_kms_server.yaml -o docs/kms.html
           redocly build-docs etsi_004_push_mode_qkd_server.yaml -o docs/qkd.html
 
-      - name: Commit HTML
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add docs/*.html
-          git commit -m "Auto-generate HTML OpenAPI docs" || true
-          git push
-
-      # Works for branches AND tags
-      - name: Compute deploy path
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "DEPLOY_PATH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          else
-            echo "DEPLOY_PATH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
-          fi
-
-      - name: Deploy HTML to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          destination_dir: ${{ env.DEPLOY_PATH }}
-          exclude_assets: '**/*.pdf'
-
-      - name: Print URLs
-        run: |
-          REPO=${GITHUB_REPOSITORY#*/}
-          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${DEPLOY_PATH}"
-          echo "$BASE/kms.html"
-          echo "$BASE/qkd.html"
+          name: html
+          path: docs/*.html
 
   pdf-docs:
     runs-on: ubuntu-latest
@@ -74,8 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -88,10 +55,43 @@ jobs:
           rapipdf etsi_004_push_mode_kms_server.yaml -o docs/kms.pdf -c docs/rapipdf_config.json
           rapipdf etsi_004_push_mode_qkd_server.yaml -o docs/qkd.pdf -c docs/rapipdf_config.json
 
-      - name: Commit PDFs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: docs/*.pdf
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: [html-docs, pdf-docs]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: docs
+
+      - name: Compute deploy path
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add docs/*.pdf
-          git commit -m "Auto-generate PDF OpenAPI docs" || true
-          git push
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "DEPLOY_PATH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_PATH=${GITHUB_REF_NAME//\//-}" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: ${{ env.DEPLOY_PATH }}
+
+      - name: Print URLs
+        run: |
+          REPO=${GITHUB_REPOSITORY#*/}
+          BASE="https://${GITHUB_REPOSITORY_OWNER}.github.io/$REPO/${DEPLOY_PATH}"
+          echo "$BASE/kms.html"
+          echo "$BASE/qkd.html"
+          echo "$BASE/kms.pdf"
+          echo "$BASE/qkd.pdf"

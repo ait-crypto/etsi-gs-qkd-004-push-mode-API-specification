@@ -30,13 +30,17 @@ The raw HTML files can be found here:
 
 # 3. PDF view
 
-The PDF is generated with [rapipdf-cli by kingjan1999](https://github.com/kingjan1999/rapipdf-cli/tree/master), a cli wrapper for the [RapiPDF](https://github.com/mrin9/RapiPdf) tool. The PDF is checked in at the corresponding branch on github and can be found here:
+The PDF is generated with [rapipdf-cli by kingjan1999](https://github.com/kingjan1999/rapipdf-cli/tree/master), a cli wrapper for the [RapiPDF](https://github.com/mrin9/RapiPdf) tool. The PDFs are also deployed at the corresponding GitHub page:
 
-- [KMS server](../docs/kms.pdf)
-- [QKD server](../docs/qkd.pdf)
+- [QKD server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/qkd.pdf)
+- [KMS server (main branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/main/kms.pdf)
+- [QKD server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/qkd.pdf)
+- [KMS server (development branch)](https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/development/kms.pdf)
+
+Any other branch can be viewed by adapting the URL, provided it triggered the corresponding GitHub action: `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/kms.html` and `https://ait-crypto.github.io/etsi-gs-qkd-004-push-mode-API-specification/<branch-name>/qkd.pdf`. If the `<branch_name>` contains the `/` character, it has to be replaced by a `-` character.
 
 The tool has a fairly fixed formatting. Some clarifications:
 
 - An asterisk character `*` next to a value denotes required fields in the payload.
 - Payload entries of the type object are highlighted in bold.
-- The tool fails to resolve references to schemes defined in a different file. This only affects the [KMS server](../docs/kms.pdf). It then prints the type `{recursive}`. In that case, refer to the defined scheme in [QKD server](../docs/qkd.pdf) with the same name.
+- The tool fails to resolve references to schemes defined in a different file. This only affects the KMS server document. It then prints the type `{recursive}`. In that case, refer to the defined scheme in QKD server document with the same name.
