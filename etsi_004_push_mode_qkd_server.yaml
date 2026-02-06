@@ -56,16 +56,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  source:
-                    type: string
-                    description: the source URI of the request.
-                    format: uri
-                    example: "http://kms-1.net"
-                  destination:
-                    type: string
-                    description: the destination URI of the request.
-                    format: uri
-                    example: "http://kms-2.net"
                   key_stream_id:
                     type: string
                     format: uuid
