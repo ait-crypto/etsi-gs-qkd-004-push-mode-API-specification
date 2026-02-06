@@ -18,7 +18,7 @@ paths:
       tags:
         - etsi004
       summary: Endpoint for pushing key material.
-      description: According to the sequence, after receiving a successful get_key the QKD can push the keys it generates to this endpoint.
+      description: According to the sequence, after receiving a successful `get-key` the QKD can push the keys it generates to this endpoint.
       operationId: post_key_material
       requestBody:
         required: true
@@ -42,7 +42,7 @@ paths:
                     size:
                       type: integer
                       format: uint32
-                      description: size of buffer in characters
+                      description: size of buffer in characters.
                       example: 57
                     buffer:
                       type: object
@@ -50,7 +50,7 @@ paths:
                       format: json
                       properties:
                         key_stream_id:
-                          description: key stream ID to which the value belongs (required for KMS in case of multiple open key streams)
+                          description: key stream ID to which the value belongs (required for KMS in case of multiple open key streams).
                           type: string
                           format: uuid
                       required:
@@ -61,7 +61,7 @@ paths:
                 - key_buffer
       responses:
         "201":
-          description: Key successfully received
+          description: Key successfully received.
           content:
             application/json:
               schema:
