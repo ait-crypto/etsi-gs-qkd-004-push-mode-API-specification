@@ -1,7 +1,7 @@
 openapi: 3.1.2
 info:
   title: ETSI GS QKD 004 push mode specification, QKD server
-  description: Server description of the QKD endpoint processing ETSI GS QKD 004 push mode requests
+  description: Server description of the QKD endpoint for processing ETSI GS QKD 004 push mode requests
   version: 1.0.1
   contact:
     url: https://qkd-kms.ait.ac.at
@@ -18,7 +18,7 @@ paths:
       tags:
         - etsi004
       summary: open key stream
-      description: The `open-connect` message connects a KMS to the QKD Device. Conforming to the specification, the QKD device will assign the `key_stream_id` and can suggest alternative QoS due to its capabilities.
+      description: The `open-connect` message connects a KMS to the QKD Device. As per sequence definition, the QKD device will assign the `key_stream_id` at the source node, therefore `null` has to be given as key_stream_id parameter.The QKD can suggest alternative QoS due to its capabilities. At the destination, the key_stream_id has to be specified to the same given at the source.
       operationId: post_open_connect
       requestBody:
         required: true
@@ -40,7 +40,7 @@ paths:
                 key_stream_id:
                   type: string
                   format: uuid
-                  description: key stream ID. If not specified it is up to the QKD device to define the UUID
+                  description: key stream ID. If `null` specified it is up to the QKD device to define the UUID
                 qos:
                   $ref: "#/components/schemas/qos"
               required:
@@ -100,8 +100,8 @@ paths:
     get:
       tags:
         - etsi004
-      summary: start pushed key retrieval process
-      description: The `get-key` message is the starting point after which the QKD device can start pushing keys.
+      summary: Start the pushed key retrieval process
+      description: The `get-key` message informs the QKD device that it can start pushing keys.
       operationId: get_key
       requestBody:
         required: true

@@ -17,8 +17,8 @@ paths:
     post:
       tags:
         - etsi004
-      summary: endpoint to push key material to.
-      description: According to the sequence, after a successful `get_key`, the QKD can push the corresponding key material to this endpoint, whenever it created a new key.
+      summary: Endpoint for pushing key material.
+      description: According to the sequence, after receiving a successful get_key the QKD can push the keys it generates to this endpoint.
       operationId: post_key_material
       requestBody:
         required: true
