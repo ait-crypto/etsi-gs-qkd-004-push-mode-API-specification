@@ -40,7 +40,7 @@ paths:
                 key_stream_id:
                   type: string
                   format: uuid
-                  description: key stream ID. If `null` specified it is up to the QKD device to define the UUID
+                  description: ID of the key stream. If `null` specified it is up to the QKD device to define the UUID. At the destination it should match the source `key_stream_id`.
                 qos:
                   $ref: "#/components/schemas/qos"
               required:
