@@ -18,7 +18,7 @@ paths:
       tags:
         - etsi004
       summary: open key stream
-      description: The `open-connect` message connects a KMS to the QKD Device. As per sequence definition, the QKD device will assign the `key_stream_id` at the source node, therefore `null` has to be given as key_stream_id input parameter. At the destination, the key_stream_id has to be specified to the same value given at the source. The QKD can suggest alternative QoS due to its capabilities.
+      description: The `open-connect` message connects a KMS to the QKD Device. As per sequence definition, the QKD device will assign the `key_stream_id` at the source node, therefore `null` has to be given as `key_stream_id` input parameter. At the destination, the `key_stream_id` has to be specified to the same value given at the source. The QKD can suggest alternative QoS due to its capabilities.
       operationId: post_open_connect
       requestBody:
         required: true
@@ -47,6 +47,7 @@ paths:
                 - source
                 - destination
                 - qos
+                - key_stream_id
 
       responses:
         "201":
