@@ -1,7 +1,7 @@
 openapi: 3.1.2
 info:
   title: ETSI GS QKD 004 push mode specification, QKD server
-  description: Server description of the QKD endpoint processing ETSI GS QKD 004 push mode requests
+  description: Server description of the QKD endpoint for processing ETSI GS QKD 004 push mode requests
   version: 1.0.1
   contact:
     url: https://qkd-kms.ait.ac.at
@@ -18,7 +18,7 @@ paths:
       tags:
         - etsi004
       summary: open key stream
-      description: The `open-connect` message connects a KMS to the QKD Device. Conforming to the specification, the QKD device will assign the `key_stream_id` and can suggest alternative QoS due to its capabilities.
+      description: The `open-connect` message connects a KMS to the QKD Device. As per sequence definition, the QKD device will assign the `key_stream_id` at the source node, therefore `null` has to be given as `key_stream_id` input parameter. At the destination, the `key_stream_id` has to be specified to the same value given at the source. The QKD can suggest alternative QoS due to its capabilities.
       operationId: post_open_connect
       requestBody:
         required: true
@@ -40,17 +40,18 @@ paths:
                 key_stream_id:
                   type: string
                   format: uuid
-                  description: key stream ID. If not specified it is up to the QKD device to define the UUID
+                  description: ID of the key stream. If `null` specified it is up to the QKD device to define the UUID. At the destination it should match the source `key_stream_id`.
                 qos:
                   $ref: "#/components/schemas/qos"
               required:
                 - source
                 - destination
                 - qos
+                - key_stream_id
 
       responses:
         "201":
-          description: Key stream successfully created
+          description: Key stream successfully created.
           content:
             application/json:
               schema:
@@ -59,7 +60,7 @@ paths:
                   key_stream_id:
                     type: string
                     format: uuid
-                    description: key stream ID. If not specified it is up to the QKD device to define the UUID
+                    description: key stream ID. If not specified it is up to the QKD device to define the UUID.
                   qos:
                     $ref: "#/components/schemas/qos"
                   status:
@@ -69,7 +70,7 @@ paths:
                   - destination
                   - qos
         "400":
-          description: Client sent a malformed input
+          description: Client sent a malformed input.
           content:
             application/json:
               schema:
@@ -83,7 +84,7 @@ paths:
                   status: 5
 
         "500":
-          description: The server experienced an internal error
+          description: The server experienced an internal error.
           content:
             application/json:
               schema:
@@ -100,8 +101,8 @@ paths:
     get:
       tags:
         - etsi004
-      summary: start pushed key retrieval process
-      description: The `get-key` message is the starting point after which the QKD device can start pushing keys.
+      summary: Start the pushed key retrieval process.
+      description: The `get-key` message informs the QKD device that it can start pushing keys.
       operationId: get_key
       requestBody:
         required: true
@@ -113,7 +114,7 @@ paths:
                 key_stream_id:
                   type: string
                   format: uuid
-                  description: corresponding to the one given in `open_connect`
+                  description: corresponding to the one given in `open-connect`.
                 index:
                   type: integer
                   format: uint32
@@ -124,7 +125,7 @@ paths:
                 - key_stream_id
       responses:
         "205":
-          description: Successful registration
+          description: Successful registration.
           content:
             application/json:
               schema:
@@ -137,7 +138,7 @@ paths:
                 required:
                   - status
         "400":
-          description: Client sent a malformed input
+          description: Client sent a malformed input.
           content:
             application/json:
               schema:
@@ -153,7 +154,7 @@ paths:
                   status: 3
 
         "500":
-          description: The server experienced an internal error
+          description: The server experienced an internal error.
           content:
             application/json:
               schema:
@@ -185,12 +186,12 @@ paths:
                 key_stream_id:
                   type: string
                   format: uuid
-                  description: corresponding to the one given in `open_connect`
+                  description: corresponding to the one given in `open-connect`.
               required:
                 - key_stream_id
       responses:
         "204":
-          description: Key stream successfully closed
+          description: Key stream successfully closed.
           content:
             application/json:
               schema:
@@ -201,7 +202,7 @@ paths:
                 required:
                   - status
         "400":
-          description: Client sent a malformed input
+          description: Client sent a malformed input.
           content:
             application/json:
               schema:
@@ -215,7 +216,7 @@ paths:
                   status: 5
 
         "500":
-          description: The server experienced an internal error
+          description: The server experienced an internal error.
           content:
             application/json:
               schema:
@@ -241,17 +242,17 @@ components:
           example: 32
         max_bps:
           type: integer
-          description: in bit per second
+          description: in bit per second.
           example: 128
           format: uint32
         min_bps:
           type: integer
-          description: in bit per second
+          description: in bit per second.
           example: 64
           format: uint32
         jitter:
           type: integer
-          description: in bit per second
+          description: in bit per second.
           format: uint32
           example: 1
         priority:
@@ -271,7 +272,7 @@ components:
           format: uint32
         metadata_mimetype:
           type: string
-          description: MIME type of the metadata of the `get` request
+          description: MIME type of the metadata of the `get` request.
           example: application/json
           format: json
     metadata:
@@ -280,7 +281,7 @@ components:
         size:
           type: integer
           format: uint32
-          description: size of buffer in characters
+          description: size of buffer in characters.
         buffer:
           type: string
           description: metadata in json format.
@@ -293,21 +294,21 @@ components:
       description: |
         Status code:
 
-          0 = Successful; HTTP code 200
+          0 = Successful; HTTP code 200.
 
-          1 = Successful connection, but peer not connected; HTTP code 200
+          1 = Successful connection, but peer not connected; HTTP code 200.
 
-          2 = GET_KEY failed because insufficient key available; HTTP code 500
+          2 = GET_KEY failed because insufficient key available; HTTP code 500.
 
-          3 = GET_KEY failed because peer application is not yet connected; HTTP code 400
+          3 = GET_KEY failed because peer application is not yet connected; HTTP code 400.
 
-          4 = No QKD connection available; HTTP code 500
+          4 = No QKD connection available; HTTP code 500.
 
-          5 = OPEN_CONNECT failed because the KSID is already in use; HTTP code 400
+          5 = OPEN_CONNECT failed because the KSID is already in use; HTTP code 400.
 
-          6 = TIMEOUT_ERROR: The call failed because the specified TIMEOUT; HTTP code 500
+          6 = TIMEOUT_ERROR: The call failed because the specified TIMEOUT; HTTP code 500.
 
-          7 = OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred; HTTP code 500
+          7 = OPEN failed because requested QoS settings could not be met, counter proposal included in return has occurred; HTTP code 500.
 
-          8 = GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata; HTTP code 400
+          8 = GET_KEY failed because metadata field size insufficient. Returned Metadata_size value holds minimum needed size of metadata; HTTP code 400.
           
